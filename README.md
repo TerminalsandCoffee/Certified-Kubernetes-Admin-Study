@@ -1,5 +1,7 @@
-# Certified-Kubernetes-Admin-Study
-Exam notes for the Certified Kubernetes Associate (CKA) - KodeKloud
+## Certified-Kubernetes-Admin-Study
+
+This is my own personal exam notes for the Certified Kubernetes Associate (CKA) using KodeKloud
+
 https://learn.kodekloud.com/
 
 https://www.cncf.io/training/certification/cka/
