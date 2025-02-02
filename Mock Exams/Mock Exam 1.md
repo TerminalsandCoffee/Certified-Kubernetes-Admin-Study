@@ -36,7 +36,7 @@ kubectl get pods --show-labels
 kubectl create namespace apx-x9984574
 ```
 
-> A Kubernetes namespace logically divides a cluster into isolated environments.
+> A Kubernetes namespace logically divides a cluster into isolated environments. Similar to different rooms in a house, each room has its own space and purpose, so things don’t get mixed up.
 
 ---
 ## Question 4
