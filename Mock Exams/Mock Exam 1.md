@@ -6,10 +6,10 @@
 - Image: nginx:alpine  
 
 ```bash
-kubectl run nginx-pod --image=nginx:alpine --restart=Never
+kubectl run nginx-pod --image=nginx:alpine
 ```
 
-> Note: Specifying `--restart=Never` ensures that Kubernetes creates a Pod rather than a Deployment.
+
 
 ---
 ## Question 2
@@ -112,7 +112,7 @@ kubectl get pods -A | grep static-busybox
 - Image: redis:alpine  
 
 ```bash
-kubectl run temp-bus --image=redis:alpine --namespace=finance
+kubectl run temp-bus --image=redis:alpine --namespace=finance --restart=Never
 ```
 
 ---
