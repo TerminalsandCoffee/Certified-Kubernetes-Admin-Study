@@ -50,6 +50,11 @@ To view the contents:
 ```bash
 cat /opt/outputs/nodes-z3444kd9.json
 ```
+> kubectl get nodes lists all nodes in the cluster.
+> -o json outputs the information in JSON format.
+> redirects the output to a file instead of displaying it in the terminal.
+> /opt/outputs/nodes-z3444kd9.json is the file where the JSON output is saved.
+
 
 ---
 ## Question 5
