@@ -9,7 +9,12 @@
 kubectl run nginx-pod --image=nginx:alpine
 ```
 
-
+> - `kubectl` lists all nodes in the cluster.
+> - `run` creates and runs a pod with a single container.
+> - `nginx-pod` is the name being assigned to the pod.
+> - `--image=nginx:alpine` specifies which container image to use:
+>   - `nginx` is the name of the image (a popular web server)
+>   - `alpine` is the specific tag/version, based on Alpine Linux (known for being lightweight)
 
 ---
 ## Question 2
@@ -36,7 +41,12 @@ kubectl get pods --show-labels
 kubectl create namespace apx-x9984574
 ```
 
-> A Kubernetes namespace logically divides a cluster into isolated environments. Similar to different rooms in a house, each room has its own space and purpose, so things don’t get mixed up.
+> - A Kubernetes namespace logically divides a cluster into isolated environments. Similar to different rooms in a house, each room has its own space and purpose, so things don't get mixed up.
+> - Namespaces do not inherently need labels for their creation because:
+>   - Namespaces are already a method of isolation and organization by themselves
+>   - They provide a scope for names, which inherently organizes resources
+>   - You can add labels to namespaces post-creation (e.g., `kubectl label namespace apx-x9984574 tier=msg`)
+>   - Labels aren't required at creation since the primary function of a namespace is to segregate resources, not to describe them with metadata
 
 ---
 ## Question 4
