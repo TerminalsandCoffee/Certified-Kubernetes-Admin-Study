@@ -77,6 +77,50 @@ cat /opt/outputs/nodes-z3444kd9.json
 kubectl expose pod messaging --name=messaging-service --port=6379 --target-port=6379 --type=ClusterIP --selector=tier=msg
 ```
 
+### Command Explanation:
+
+This `kubectl expose` command creates a Kubernetes **Service** to expose a pod named `messaging` within the cluster. Let's break it down:
+
+### **Command Breakdown**
+```sh
+kubectl expose pod messaging \
+  --name=messaging-service \
+  --port=6379 \
+  --target-port=6379 \
+  --type=ClusterIP \
+  --selector=tier=msg
+```
+
+> - **`kubectl expose pod messaging`**
+>   - This tells Kubernetes to create a **Service** that exposes the pod named `messaging`.
+>
+> - **`--name=messaging-service`**
+>   - This specifies the name of the Service to be created. It will be named `messaging-service`.
+>
+> - **`--port=6379`**
+>   - This is the port **on the Service** that will be exposed to other pods within the cluster.
+>   - Any pod that wants to communicate with `messaging-service` will use **port 6379**.
+>
+> - **`--target-port=6379`**
+>   - This is the port **on the messaging pod** that receives the traffic.
+>   - Since Redis typically runs on **port 6379**, this forwards the request from `port 6379` on the Service to `port 6379` on the `messaging` pod.
+>
+> - **`--type=ClusterIP`**
+>   - This makes the Service a **ClusterIP** type, which means:
+>     - The Service is only accessible **within the cluster**.
+>     - It **cannot be accessed from outside Kubernetes**.
+>     - Other pods in the cluster can access it via `messaging-service:6379`.
+>
+> - **`--selector=tier=msg`**
+>   - This sets a **label selector** (`tier=msg`) to match **other pods** that should be targeted.
+>   - If the `messaging` pod does not have the label `tier=msg`, the Service will **not** correctly route traffic.
+>
+> - **Use Case**
+>   - You want to expose a Redis service (`port 6379`) inside the cluster.
+>   - Only other Kubernetes services/pods should access it (not external users).
+>   - Your pod might change dynamically, but as long as it has the label `tier=msg`, the service will route traffic to the right pod.
+
+
 ---
 ## Question 6
 ### Create a deployment named hr-web-app using the image kodekloud/webapp-color with 2 replicas.
@@ -144,7 +188,14 @@ kubectl edit deployment orange -n default
 ```bash
 kubectl expose deployment hr-web-app --name=hr-web-app-service --port=8080 --target-port=8080 --type=NodePort
 kubectl patch svc hr-web-app-service -p '{"spec": {"ports": [{"port": 8080, "targetPort": 8080, "nodePort": 30082}],"type": "NodePort"}}'
-```
+
+
+### Command Explanation:
+> - `kubectl expose deployment hr-web-app` creates a service named hr-web-app-service from the existing hr-web-app deployment.
+> - `--port=8080` exposes the service on port 8080 (inside the cluster).
+> - `--target-port=8080` routes traffic to container port 8080.
+> - `--type=NodePort` makes the service accessible externally on a random high port.
+> - `kubectl patch svc hr-web-app-service` updates the service to use a fixed NodePort (30082) instead of a randomly assigned one.
 
 To verify:
 ```bash
@@ -169,6 +220,24 @@ Verify:
 ```bash
 cat /opt/outputs/nodes_os_x43kj56.txt
 ```
+
+### Command Explanation:
+kubectl get nodes → Retrieves information about all nodes in the cluster.
+
+Think: "What do I want?" → I want to get node details.
+> - `-o jsonpath='{.items[*].status.nodeInfo.osImage}'` → Extracts only the OS images of the nodes using jsonpath.
+
+Think: "What specific detail do I need?" → OS Image of each node.
+Breakdown of the JSON path:
+> - `.items[*]` → Selects all nodes (* means all items).
+> - `.status.nodeInfo.osImage` → Extracts the OS image for each node.
+> - `>` → Redirects the output to a file.
+
+Think: "Where should I save it?" → In a file.
+> - `/opt/outputs/nodes_os_x43kj56.txt` → The destination file where the extracted OS images are stored.
+
+Think: "What's the filename?" → nodes_os_x43kj56.txt.
+
 
 ---
 ## Question 12
