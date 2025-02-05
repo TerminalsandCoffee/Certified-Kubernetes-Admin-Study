@@ -226,4 +226,25 @@ kubectl auth can-i delete pods --as=john --namespace=development
 
 ## Question 7
 
-### 
+### Create a nginx pod called nginx-resolver using image nginx, expose it internally with a service called nginx-resolver-service. Test that you are able to look up the service and pod names from within the cluster. Use the image: busybox:1.28 for dns lookup. Record results in /root/CKA/nginx.svc and /root/CKA/nginx.pod
+
+> - **Requirements:**
+
+> - Pod: nginx-resolver created
+
+> - Service DNS Resolution recorded correctly
+
+> - Pod DNS resolution recorded correctly
+
+
+
+
+---
+## Question 8
+
+### Create a static pod on node01 called nginx-critical with image nginx and make sure that it is recreated/restarted automatically in case of a failure.
+
+> - **Requirements:**
+> - Use /etc/kubernetes/manifests as the Static Pod path for example.
+> - static pod configured under /etc/kubernetes/manifests ?
+> - Pod nginx-critical-node01 is up and running
