@@ -5,11 +5,9 @@
 ### Take a backup of the etcd cluster and save it to /opt/etcd-backup.db.
 
 ```bash
-ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
-  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-  --cert=/etc/kubernetes/pki/etcd/server.crt \
-  --key=/etc/kubernetes/pki/etcd/server.key \
-  snapshot save etcd-backup.db
+export ETCDCTL_API=3 
+etcdctl snapshot save --endpoints https://[127.0.0.1]:2379 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key  /opt/etcd-backup.db
+
 ```
 ### Command Explanation:
 
@@ -185,6 +183,7 @@ kubectl describe deployment nginx-deploy
 
 - **`kubectl set image deployment/nginx-deploy nginx=nginx:1.17 --record`**
   - Updates the deployment to use `nginx:1.17` and records the change
+  - Flag --record has been deprecated
 
 - **`kubectl rollout history deployment/nginx-deploy`**
   - Checks the rollout history of the deployment
@@ -203,17 +202,43 @@ kubectl describe deployment nginx-deploy
 
 
 ```bash
-kubectl create user john
+kubectl create role developer -n development --resource=pods --verb=create,list,get,update,delete
 
+kubectl create rolebinding developer-binding -n development --role developer --user=john
+```
 
-# Approve John's CSR
-kubectl certificate approve john
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: john-developer
+spec:
+  signerName: kubernetes.io/kube-apiserver-client
+  request: $(cat /root/john.csr | base64 | tr -d '\n')
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
+EOF
 
-# Create a role that allows pod management in the development namespace
-kubectl create role pod-manager --verb=create,list,get,update,delete --resource=pods --namespace=development
+kubectl get csr
+kubectl certificate approve john-developer
+```
+To approve this certificate, run: kubectl certificate approve john-developer
 
-# Bind the role to the user 'john'
-kubectl create rolebinding john-pod-manager --role=pod-manager --user=john --namespace=development
+Next, create a role developer and rolebinding developer-role-binding, run the command:
+
+```bash
+kubectl create role developer --resource=pods --verb=create,list,get,update,delete --namespace=development
+
+kubectl create rolebinding developer-role-binding --role=developer --user=john --namespace=development
+```
+To verify the permission from kubectl utility tool:
+
+```bash
+kubectl auth can-i update pods --as=john --namespace=development
+```
 
 # Verify permissions
 kubectl auth can-i create pods --as=john --namespace=development
@@ -221,7 +246,7 @@ kubectl auth can-i list pods --as=john --namespace=development
 kubectl auth can-i get pods --as=john --namespace=development
 kubectl auth can-i update pods --as=john --namespace=development
 kubectl auth can-i delete pods --as=john --namespace=development
-```
+
 ---
 
 ## Question 7
@@ -236,8 +261,23 @@ kubectl auth can-i delete pods --as=john --namespace=development
 
 > - Pod DNS resolution recorded correctly
 
+```bash
+kubectl run nginx-resolver --image=nginx
+kubectl expose pod nginx-resolver --name=nginx-resolver-service --port=80 --target-port=80 --type=ClusterIP
+```
 
+To create a pod test-nslookup. Test that you are able to look up the service and pod names from within the cluster:
 
+```bash
+kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service
+kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service > /root/CKA/nginx.svc
+```
+
+Get the IP of the nginx-resolver pod and replace the dots(.) with hyphon(-) which will be used below.
+```bash
+kubectl get pod nginx-resolver -o wide
+kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup <P-O-D-I-P.default.pod> > /root/CKA/nginx.pod
+```
 
 ---
 ## Question 8
@@ -248,3 +288,25 @@ kubectl auth can-i delete pods --as=john --namespace=development
 > - Use /etc/kubernetes/manifests as the Static Pod path for example.
 > - static pod configured under /etc/kubernetes/manifests ?
 > - Pod nginx-critical-node01 is up and running
+
+`ssh node01`
+https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
+`cat /var/lib/kubelet/config.yaml | grep stat`
+
+```bash
+cat <<EOF > /etc/kubernetes/manifests/nginx-critical.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-critical
+spec:
+  containers:
+    - name: web
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
+EOF
+```
+
