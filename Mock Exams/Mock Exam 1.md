@@ -172,11 +172,16 @@ kubectl run temp-bus --image=redis:alpine --namespace=finance --restart=Never
 ---
 ## Question 9
 ### Identify and fix issues in a newly deployed application named orange.
+You can update a pod with the following command:
 ```bash
-kubectl get pod orange -n default -o yaml
-kubectl edit deployment orange -n default
+kubectl edit po orange
 ```
+It's not possible to update the changes in the running pod so after saving the changes. It will create a temporary file in the default location /tmp/.
 
+We will use that manifest file and replace with the existing pod:
+```bash
+kubectl replace -f /tmp/kubectl-edit-xxxx.yaml --force
+```
 ---
 ## Question 10
 ### Expose the hr-web-app as a NodePort service accessible on port 30082.
