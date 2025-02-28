@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # CKA Practice Questions and Commands
 
 ## Question 1
