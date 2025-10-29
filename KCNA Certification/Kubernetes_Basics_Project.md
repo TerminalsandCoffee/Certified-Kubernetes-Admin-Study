@@ -153,3 +153,14 @@ minikube service web-deployment
 
 You’ve deployed and exposed a scalable, persistent web app — all within a Minikube cluster.
 This demonstrates a clear understanding of Kubernetes fundamentals: compute, networking, and storage.
+
+## 🧹 Cleanup (Optional)
+
+```bash
+# Stop the cluster
+minikube stop
+
+# Or delete it entirely
+minikube delete
+```
+Stopping keeps the cluster for next time; deleting wipes it clean so you can start fresh.
