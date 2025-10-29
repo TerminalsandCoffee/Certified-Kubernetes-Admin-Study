@@ -5,18 +5,23 @@ I orginally planned to take the CKA earlier this year but decided I needed to wo
 
 The fundamentals - which is why I have included KCNA within this repo.
 
-This section summarizes my preparation for the **Kubernetes and Cloud Native Associate (KCNA)** certification.
+I used two main materials to prepare. Udemy has a course and practice test by James Spurin, and the second is a book called, "Becoming KCNA Certified" by Dmitry Galkin. I am not associated by either course or book but feel free to review them on your own: 
 
-While the official practice questions and materials used for study are not included here (copyrighted sources), this folder documents:
-- Core Kubernetes concepts reviewed (Pods, Deployments, Services, etc.)
-- Study notes, analogies, and explanations written in my own words
-- Key takeaways from official CNCF and Kubernetes documentation
-- Self-made flashcards and mock question summaries
+https://github.com/PacktPublishing/Becoming-KCNA-Certified
+https://udemy.com/course/dive-into-cloud-native-containers-kubernetes-and-the-kcna/
 
-### Example Topics Covered
-- **Container Runtimes:** containerd, CRI-O, runc
-- **Kubernetes Architecture:** kubelet, kube-scheduler, etcd
-- **Networking & Security:** CNI, NetworkPolicies, RBAC
-- **Cloud Native Concepts:** GitOps, CI/CD, Observability
+I'll also add some content that can help you prepare for the **Kubernetes and Cloud Native Associate (KCNA)** exam — focused on building hands-on understanding through projects, terminology summaries, and practice questions.
 
-*(This repo only contains original study notes and explanations — no copyrighted material.)*
+Each section reflects my own notes, explanations, and examples derived from official CNCF and Kubernetes documentation.
+
+![alt text](68d5e28091340e81479d6744_65ae828738f662e9dd212473_unnamed-7-.webp)
+Image taken from: https://www.qovery.com/blog/what-is-kubernetes
+
+
+
+## Contents
+1. [Kubernetes Basics Project](./1_Kubernetes_Basics_Project.md)
+2. [Common Terms Glossary](./2_Common_Terms_Glossary.md)
+3. [Practice Questions](./3_Practice_Questions.md)
+
+
